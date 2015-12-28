@@ -1,0 +1,28 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1451338320051.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "EF57704D",
+    "lastKnownWriteTime" : 7813501399345397766,
+    "last_content_update" : 1451338320051,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "2oxitsy4dc",
+        "caption" : "gps",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=gps&cache_key=2oxitsy4dc",
+        "displayedObservations" : 13,
+        "environment" : "",
+        "object" : "gps",
+        "totalObservations" : 13,
+        "variables" : 3
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}
