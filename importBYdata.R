@@ -23,13 +23,15 @@ l = bigyearWS %>%
 # Merge datasets together
 by = bind_rows(mj, nr, l) %>% 
   transmute(team = team,
-            species = str_to_lower(Species), # Strip out upper case chars
+            species = str_to_title(Species), # Strip out upper case chars
+            species = str_trim(species), # Trim extra spaces, if they exist
             sex = `Sex..if.known.`,
             location = str_to_lower(Location),
             state = str_to_upper(State),
             loc = paste(location, state),
             date = Date)
 
+by = left_join(by, birdDB, by = c("species" = "commonName"))
 # Convert places to GPS coords.
 gps = geocode(by$loc, output = 'latlona')
 
