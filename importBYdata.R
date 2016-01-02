@@ -60,11 +60,11 @@ fullTimeRange = data.frame(team =
 cumBirds = bigyear %>% 
   count(team, date) 
 
-cumBirds2 = bind_rows(cumBirds, fullTimeRange) %>% 
+cumBirds = bind_rows(cumBirds, fullTimeRange) %>% 
   group_by(team, date) %>% 
   summarise(n = sum(n)) %>% 
   mutate(numBirds = cumsum(n))
 
-ggplot(cumBirds2, aes(x = date, y = numBirds, 
+ggplot(cumBirds, aes(x = date, y = numBirds, 
                      group = team, colour = team)) +
   geom_line()
