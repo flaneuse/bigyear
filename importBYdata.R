@@ -21,7 +21,7 @@ l = bigyearWS %>%
 
 # Clean up the data -------------------------------------------------------
 # Merge datasets together
-by = bind_rows(mj, nr, l) %>% 
+bigyear = bind_rows(mj, nr, l) %>% 
   transmute(team = team,
             species = str_to_title(Species), # Strip out upper case chars
             species = str_trim(species), # Trim extra spaces, if they exist
@@ -29,11 +29,11 @@ by = bind_rows(mj, nr, l) %>%
             location = str_to_lower(Location),
             state = str_to_upper(State),
             loc = paste(location, state),
-            date = Date)
+            date = mdy(Date))
 
-by = left_join(by, birdDB, by = c("species" = "commonName"))
+bigyear = left_join(bigyear, birdDB, bigyear = c("species" = "commonName"))
 # Convert places to GPS coords.
-gps = geocode(by$loc, output = 'latlona')
+gps = geocode(bigyear$loc, output = 'latlona')
 
 # Displace data from houses.
 
@@ -42,10 +42,29 @@ gps = geocode(by$loc, output = 'latlona')
 # Check birds are unique
 
 # Count unique species ----------------------------------------------------
-cumBirds = by %>% 
-  count(team, date) %>% 
+begDate = as.Date('2015-12-26')
+endDate = today()
+
+numDays = as.period(interval(begDate, endDate), units = 'days')
+numDays = numDays$day + 1
+
+fullTimeRange = ymd(seq.Date(begDate, endDate, by = 'days'))
+
+fullTimeRange = data.frame(team = 
+                             c(rep('Michael and Jing', numDays),
+                               rep('Nancy and Rich', numDays),
+                               rep('Laura', numDays)),
+                           date = rep(fullTimeRange, 3)) %>% 
+  mutate(n = 0)
+
+cumBirds = bigyear %>% 
+  count(team, date) 
+
+cumBirds2 = bind_rows(cumBirds, fullTimeRange) %>% 
+  group_by(team, date) %>% 
+  summarise(n = sum(n)) %>% 
   mutate(numBirds = cumsum(n))
 
-ggplot(cumBirds, aes(x = date, y = numBirds, 
+ggplot(cumBirds2, aes(x = date, y = numBirds, 
                      group = team, colour = team)) +
-  geom_point()
+  geom_line()
